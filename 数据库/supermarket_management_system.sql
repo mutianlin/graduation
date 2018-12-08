@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-12-06 23:50:52
+Date: 2018-12-08 22:19:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,29 +20,35 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `assets`;
 CREATE TABLE `assets` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `but_date` date NOT NULL,
   `scrapped_date` date DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk;
 
 -- ----------------------------
 -- Records of assets
 -- ----------------------------
+INSERT INTO `assets` VALUES ('1', '资产名称', '2018-12-26', '2018-12-27');
 
 -- ----------------------------
 -- Table structure for `commodity_in`
 -- ----------------------------
 DROP TABLE IF EXISTS `commodity_in`;
 CREATE TABLE `commodity_in` (
-  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `commodity_id` int(11) NOT NULL,
   `number` int(11) NOT NULL,
   `order_number` int(11) NOT NULL,
-  `life_id` int(11) DEFAULT NULL,
+  `life_id` int(11) unsigned DEFAULT NULL,
+  `set_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `order_number` (`order_number`)
+  KEY `order_number` (`order_number`),
+  KEY `commodity_id` (`commodity_id`),
+  KEY `life_id` (`life_id`),
+  CONSTRAINT `commodity_in_ibfk_1` FOREIGN KEY (`commodity_id`) REFERENCES `commodity_information` (`id`),
+  CONSTRAINT `commodity_in_ibfk_2` FOREIGN KEY (`life_id`) REFERENCES `commodity_life` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=gbk;
 
 -- ----------------------------
@@ -69,11 +75,12 @@ CREATE TABLE `commodity_information` (
   PRIMARY KEY (`id`),
   KEY `type_id` (`type_id`),
   CONSTRAINT `commodity_information_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `commodity_type` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk;
 
 -- ----------------------------
 -- Records of commodity_information
 -- ----------------------------
+INSERT INTO `commodity_information` VALUES ('1', '品牌', '品牌 名字规格口味 100ml', '名字', '规格口味', '100', 'ml', '1234567891113', '0', '瓶', '0', '1');
 
 -- ----------------------------
 -- Table structure for `commodity_life`
@@ -88,11 +95,12 @@ CREATE TABLE `commodity_life` (
   PRIMARY KEY (`id`),
   KEY `commodity_id` (`commodity_id`),
   CONSTRAINT `commodity_life_ibfk_1` FOREIGN KEY (`commodity_id`) REFERENCES `commodity_information` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk;
 
 -- ----------------------------
 -- Records of commodity_life
 -- ----------------------------
+INSERT INTO `commodity_life` VALUES ('1', '1', '365', '2018-12-08', '2019-12-08');
 
 -- ----------------------------
 -- Table structure for `commodity_price`
@@ -153,6 +161,23 @@ INSERT INTO `commodity_type` VALUES ('6', '香烟');
 INSERT INTO `commodity_type` VALUES ('7', '酒');
 INSERT INTO `commodity_type` VALUES ('8', '日用品');
 INSERT INTO `commodity_type` VALUES ('9', '调味品');
+
+-- ----------------------------
+-- Table structure for `promotions`
+-- ----------------------------
+DROP TABLE IF EXISTS `promotions`;
+CREATE TABLE `promotions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `commodity_id` int(11) NOT NULL,
+  `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `discount_price` float NOT NULL,
+  `status` bit(1) DEFAULT b'0' COMMENT '0不启用，1启用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+-- ----------------------------
+-- Records of promotions
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `report_sales_commodity`
