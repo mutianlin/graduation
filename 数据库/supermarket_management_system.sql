@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-12-08 22:19:51
+Date: 2019-01-07 22:49:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -241,10 +241,11 @@ CREATE TABLE `user` (
   `name` varchar(255) NOT NULL,
   `pwd` char(32) NOT NULL,
   `privilege` bit(1) NOT NULL DEFAULT b'1' COMMENT '用户权限，0是站长，1是员工',
+  `Incumbent` bit(1) NOT NULL DEFAULT b'0' COMMENT '0离职，1在任',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=gbk;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '21232f297a57a5a743894a0e4a801fc3', '21232f297a57a5a743894a0e4a801fc3', '');
+INSERT INTO `user` VALUES ('1', '21232f297a57a5a743894a0e4a801fc3', '21232f297a57a5a743894a0e4a801fc3', '', '');

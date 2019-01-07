@@ -2,7 +2,7 @@ package priv.mutianlin.graduation.test;
 
 import priv.mutianlin.graduation.util.MD5;
 
-public class TestMD5 {
+public class TestUtilMD5 {
 
 	public static void main(String[] args) {
 		String a,b,c,d;
